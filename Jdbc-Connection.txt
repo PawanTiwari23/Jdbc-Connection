@@ -1,0 +1,48 @@
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DBConnection {
+    public static void main(String[] args) {
+        
+        // 1. Database Credentials
+        String url = "jdbc:mysql://localhost:3306/testdb"; 
+        String user = "root"; // Default xampp/mysql username
+        String password = "root"; // Aapka password 
+
+        try {
+            // 2. Load Driver (Optional in new Java versions but good practice)
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 3. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+            
+            if (con != null) {
+                System.out.println("Success! Database Connected.");
+            }
+
+            // 4. Create Statement (Query chalane ke liye)
+            Statement stmt = con.createStatement();
+            
+            // 5. Execute Query
+            ResultSet rs = stmt.executeQuery("SELECT * FROM students"); // 'students' table name
+
+            // 6. Process Results
+            while (rs.next()) {
+                // Column name ya index pass karein
+                System.out.println(rs.getString("name") + " - " + rs.getInt("marks"));
+            }
+
+            // 7. Close Connection
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Connection Failed!");
+        }
+    }
+}
